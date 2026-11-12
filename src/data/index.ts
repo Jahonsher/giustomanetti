@@ -38,6 +38,24 @@ export const NAV = [
 ]
 
 /* ---------- home ---------- */
+/** Full-screen WebGL slideshow on the home page. caption = text key */
+export const HERO_SLIDES = [
+  { image: img('poster/hero'), caption: 'tagline' },
+  { image: img('img/gallery'), caption: 'gl.k' },
+  { image: img('img/goldchef'), caption: 'gc.k' },
+  { image: img('img/vetrina'), caption: 'vt.k' },
+]
+
+/** Picture shown next to each page in the full-screen menu. */
+export const PAGE_IMAGES: Record<string, string> = {
+  '/': img('poster/hero'),
+  '/qurilish': img('img/wp/ig-318441970'),
+  '/katalog': img('img/catalogo'),
+  '/kosmetika': img('img/kosmetika-m'),
+  '/galereya': img('img/wp/ig-338945148'),
+  '/aloqa': img('img/wp/ig-325457552'),
+}
+
 export type Direction = { title: string; text: string; image: string; to?: string; href?: string }
 
 /** Directions shown on the 3D ring (scroll-driven navigation). */

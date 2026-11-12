@@ -2,21 +2,23 @@
 
 Giusto Manetti Battiloro kompaniyasining Oʻzbekistondagi rasmiy vakili sayti.
 
-**3.0 — premium redizayn** (`redesign` branch): NovaColor saytidagi kabi animatsiyalar,
-Manetti ranglarida — Florensiya oltini (`#C39F5F`) va toʻq koʻk (`#182340`), fil suyagi panellar.
-6 sahifa, 3 til (ru / uz / en).
+**3.1 — "Maison" dizayni** (`maison` branch). NovaColor saytidan ataylab farqli uslub
+(ikkala sayt bitta mijozga). Namuna: Awwwards "Site of the Day" — Marini 1897
+(Italiya meros brendi) va Dolsten & Co. matn animatsiyasi.
 
 🔗 Koʻrish (GitHub Pages): https://jahonsher.github.io/giustomanetti/
 
-## Nimalar bor
+## Dizayn tili
 
-- **Hero:** WebGL "suyuq oltin varaq" shaderi, sichqonchaga javob beradi.
-- **3D yoʻnalishlar halqasi:** skroll bilan aylanadi (Qurilish, Katalog, Kosmetika, Galereya, E-shop, Vitrina).
-- **Rasmlar WebGL'da:** skrollda egiladi, hover'da toʻlqin, ekranga kirganda ochiladi.
-- **Matnlar** qatorma-qator / soʻzma-soʻz "sizib chiqadi"; sahifa oʻtish pardasi, preloader, kursor.
-- **Liquid Glass navbar** (iOS uslubi): doim joyida, chetlari linzadek sinadi (Chrome),
-  boʻlimni linzani surib almashtirish mumkin; menyu navbardan suyuqlikdek oqib tushadi.
-- **Til tomchisi:** RU / UZ / EN — surib yoki bosib almashtiriladi.
+- **Fil suyagi qogʻoz** fon, toʻq koʻk siyoh, Florensiya oltini; **Playfair Display** (Didone) + Inter.
+- **Florensiya arkasi** shaklidagi rasm ramkalari; rasm ekranga kirganda ustiga **oltin varaq**
+  qoʻyilib, koʻtariladi (zarhallash kabi).
+- **Hero:** toʻliq ekranli WebGL slayd-shou — slaydlar oltin chiziqli qiya chok boʻylab almashadi.
+- Matnlar **xiralikdan tiniqlashib** chiqadi (blur reveal); bayonot soʻzma-soʻz tiniqlashadi.
+- **Ustma-ust taxlanuvchi kartalar** (yoʻnalishlar), **odometr** raqamlar, sudraladigan Instagram lentasi.
+- Galereya: rasm oʻz joyidan toʻliq ekranga **kattalashib** ochiladi.
+- Menyu: oltin varaq sahifadek **aylanib tushadi**; sahifa oʻtishi — qiya oltin varaq.
+- Preloader: **1600 → bugun** yillar sanaladi. Kursor: **oltin varaq zarralari** toʻkiladi.
 
 ## Ishga tushirish
 
@@ -36,10 +38,11 @@ src/
   i18n/texts.ts            BARCHA matnlar, 3 tilda  <- matnni shu yerda oʻzgartiring
   i18n/index.tsx           til tizimi + redizayn qoʻshgan interfeys soʻzlari
   pages/                   har sahifa alohida
-  components/              Header (navbar, menyu, til), Footer, Blocks (hero, kartalar,
-                           galereya, CTA...), ContactForm, Reveal (matn animatsiyalari)
-  gl/                      WebGL: hero shader, 3D halqa, rasm effektlari
-  lib/                     silliq skroll (Lenis), GSAP, liquid glass sinishi
+  components/              Header (+ menyu), Footer, Blocks (sahifa hero, kartalar, galereya,
+                           taxlanuvchi kartalar, odometr, CTA...), Arch (arkali rasm),
+                           Reveal (blur/qator animatsiyalari), Cursor, Preloader, Transition
+  gl/HeroSlider.tsx        WebGL slayd-shou
+  lib/motion.ts            silliq skroll (Lenis) + GSAP
 public/                    oʻzgarmasdan dist/ ga koʻchadi
   assets/img, reels, poster  rasmlar (webp + jpg)
   send.php                 ariza -> Telegram
@@ -65,4 +68,4 @@ Hozirgi bot: **@giustomanetti_bot**.
 1. Bosh sahifadagi blok rasmlari manetti.com dan olingan (bosh kompaniya fotolari).
 2. Raqamlar manetti.com dan: 400+ yil, 15 avlod, 70+ davlat, 29 tus.
 3. Onlayn doʻkon (savat, toʻlov) yoʻq — "ariza qoldirish" ishlaydi.
-4. Chetlardagi linza sinishi faqat Chrome'da; Safari/Firefox'da oddiy xira shisha.
+4. Oldingi (NovaColor uslubidagi) versiya `redesign` branch'ida saqlangan.

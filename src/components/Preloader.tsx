@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react'
-import { asset, DIRECTIONS } from '../data'
+import { asset, HERO_SLIDES } from '../data'
 import { gsap, useGSAP, setReady, reducedMotion } from '../lib/motion'
-import { plain, useLang } from '../i18n'
 import { Mark } from './Mark'
 
+const YEAR = new Date().getFullYear()
 const preload = (src: string) =>
   new Promise<void>((resolve) => {
     const img = new Image()
@@ -11,45 +11,40 @@ const preload = (src: string) =>
     img.src = asset(src)
   })
 
-/** Counter 000 → 100 while fonts + first images load, then the curtain lifts. */
+/** Years count from 1600 to today while fonts and hero photos load. */
 export function Preloader() {
   const root = useRef<HTMLDivElement>(null)
   const [done, setDone] = useState(false)
-  const { t } = useLang()
 
   useGSAP(
     () => {
       const el = root.current!
-      const counter = el.querySelector('[data-count]')!
-      const progress = { v: 0 }
+      const year = el.querySelector('[data-year]')!
+      const bar = el.querySelector('[data-bar]')
       let loaded = 0
-      const jobs = [document.fonts.ready.then(() => undefined), ...DIRECTIONS.map((c) => preload(c.image))]
-      const total = jobs.length
+      const jobs = [document.fonts.ready.then(() => undefined), ...HERO_SLIDES.map((s) => preload(s.image))]
       jobs.forEach((j) => j.then(() => loaded++))
 
-      const intro = gsap.timeline()
-      intro.from(el.querySelectorAll('[data-in]'), { yPercent: 110, duration: 1.1, ease: 'expo.out', stagger: 0.08 })
-
-      // the counter chases real progress, but never faster than ~1.6s
-      const chase = gsap.to(progress, {
-        v: 100,
-        duration: reducedMotion ? 0.2 : 1.8,
+      gsap.from(el.querySelector('[data-mark]'), { opacity: 0, filter: 'blur(16px)', y: 12, duration: 1.4, ease: 'power3.out' })
+      const p = { v: 0 }
+      const chase = gsap.to(p, {
+        v: 1,
+        duration: reducedMotion ? 0.2 : 2,
         ease: 'power2.inOut',
         onUpdate: () => {
-          const v = Math.min(progress.v, ((loaded + 1) / (total + 1)) * 100)
-          counter.textContent = String(Math.round(v)).padStart(3, '0')
-          gsap.set(el.querySelector('[data-bar]'), { scaleX: v / 100 })
+          const v = Math.min(p.v, (loaded + 1) / (jobs.length + 1))
+          year.textContent = String(Math.round(1600 + v * (YEAR - 1600)))
+          gsap.set(bar, { scaleX: v })
         },
       })
-
       Promise.all([Promise.all(jobs), chase.then()]).then(() => {
-        counter.textContent = '100'
+        year.textContent = String(YEAR)
         gsap
           .timeline({ onComplete: () => setDone(true) })
-          .set(el.querySelector('[data-bar]'), { scaleX: 1 })
-          .to(el.querySelectorAll('[data-in]'), { yPercent: -110, duration: 0.7, ease: 'expo.in', stagger: 0.04 })
+          .set(bar, { scaleX: 1 })
+          .to(el.querySelectorAll('[data-out]'), { opacity: 0, filter: 'blur(10px)', duration: 0.6, ease: 'power2.in', stagger: 0.05 })
           .call(() => setReady(true))
-          .to(el, { clipPath: 'inset(0% 0% 100% 0%)', duration: 1.2, ease: 'expo.inOut' }, '-=0.1')
+          .to(el, { yPercent: -100, duration: 1.2, ease: 'power4.inOut' }, '-=0.15')
       })
     },
     { scope: root },
@@ -57,34 +52,18 @@ export function Preloader() {
 
   if (done) return null
   return (
-    <div ref={root} className="fixed inset-0 z-[100] flex flex-col justify-between bg-char p-6 md:p-10" style={{ clipPath: 'inset(0% 0% 0% 0%)' }}>
-      <div className="flex justify-between">
-        <div className="overflow-hidden">
-          <span data-in className="block">
-            <Mark size="lg" />
-          </span>
-        </div>
-        <div className="overflow-hidden">
-          <span data-in className="label block">
-            {t('tagline')}
-          </span>
-        </div>
+    <div ref={root} className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-10 bg-paper text-ink">
+      <div data-out data-mark>
+        <Mark size="xl" />
       </div>
-      <div>
-        <div className="flex items-end justify-between gap-6">
-          <div className="overflow-hidden">
-            <p data-in className="display max-w-xl text-4xl italic text-ash md:text-6xl">
-              {plain(t('ab.h'))}
-            </p>
-          </div>
-          <div className="overflow-hidden">
-            <span data-in data-count className="display block text-[22vw] leading-[0.8] md:text-[14vw]">
-              000
-            </span>
-          </div>
+      <div data-out className="flex w-[min(420px,70vw)] flex-col items-center gap-4">
+        <div className="flex w-full justify-between font-display text-sm italic text-mute">
+          <span>1600</span>
+          <span data-year className="gold-text text-2xl not-italic tabular-nums">1600</span>
+          <span>{YEAR}</span>
         </div>
-        <div className="mt-6 h-px w-full bg-line">
-          <div data-bar className="h-full origin-left scale-x-0 bg-sand" />
+        <div className="h-px w-full bg-line">
+          <div data-bar className="h-full origin-left scale-x-0 bg-gold" />
         </div>
       </div>
     </div>

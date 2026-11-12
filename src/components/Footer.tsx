@@ -1,87 +1,74 @@
-import { useRef } from 'react'
 import { TLink } from './Transition'
-import { Reveal } from './Reveal'
-import { Mark } from './Mark'
+import { Blur, Lines } from './Reveal'
 import { CONTACT, NAV } from '../data'
-import { T, useLang } from '../i18n'
-import { gsap, useGSAP, useReady, lenis, reducedMotion } from '../lib/motion'
+import { plain, T, useLang } from '../i18n'
+import { lenis } from '../lib/motion'
 
 const YEAR = new Date().getFullYear()
 
 export function Footer() {
   const { t } = useLang()
-  const word = useRef<HTMLDivElement>(null)
-  const ready = useReady()
-
-  // giant wordmark rises letter by letter as the footer scrolls in
-  useGSAP(
-    () => {
-      if (!ready || reducedMotion) return
-      gsap.from(word.current!.querySelectorAll('span'), {
-        yPercent: 100,
-        ease: 'none',
-        stagger: 0.04,
-        scrollTrigger: { trigger: word.current, start: 'top bottom', end: 'bottom bottom', scrub: true },
-      })
-    },
-    { dependencies: [ready], scope: word },
-  )
-
   return (
-    <footer className="tone-char relative mt-2 overflow-hidden rounded-t-[28px] px-5 pt-20 md:mt-3 md:rounded-t-[44px] md:px-10">
-      <div className="grid gap-12 md:grid-cols-12">
-        <div className="md:col-span-4">
-          <Mark size="lg" />
-          <Reveal as="p" className="mt-6 max-w-sm text-sm leading-relaxed text-ash" html={t('ft.p')} />
-        </div>
-        <div className="md:col-span-2 md:col-start-6">
-          <p className="label mb-5">{t('ft.prod')}</p>
-          <ul className="space-y-2 text-sm">
+    <footer className="tone-cream relative overflow-hidden px-5 pt-24 md:px-10 md:pt-32">
+      <div className="text-center">
+        <Blur as="p" className="eyebrow mb-8">{t('ft.made')}</Blur>
+        <Blur as="p" by="chars" className="didone gold-text text-[13vw] uppercase leading-[0.9] tracking-[0.04em] md:text-[9.5vw]">
+          Giusto Manetti
+        </Blur>
+        <Lines className="mx-auto mt-10 max-w-xl leading-relaxed text-mute" html={t('ft.p')} />
+      </div>
+
+      <div className="mt-20 grid gap-12 border-t border-line pt-14 md:grid-cols-4">
+        <div>
+          <p className="eyebrow mb-5">{t('ft.prod')}</p>
+          <ul className="space-y-2">
             {NAV.map((n) => (
               <li key={n.to}>
-                <TLink to={n.to} className="link-line text-ash hover:text-bone">
-                  {t(n.key)}
+                <TLink to={n.to} className="uline font-display text-lg">
+                  {plain(t(n.key))}
                 </TLink>
               </li>
             ))}
           </ul>
         </div>
-        <div className="md:col-span-3">
-          <p className="label mb-5">{t('ft.svc')}</p>
-          <ul className="space-y-2 text-sm text-ash">
+        <div>
+          <p className="eyebrow mb-5">{t('ft.svc')}</p>
+          <ul className="space-y-2 text-mute">
             <li>
-              <TLink to="/aloqa" className="link-line text-sand">
+              <TLink to="/aloqa" className="uline font-display text-lg italic text-gold">
                 {t('cta.quote')} →
               </TLink>
             </li>
             {CONTACT.phones.map((p) => (
               <li key={p.href}>
-                <a href={p.href} className="link-line text-bone">
+                <a href={p.href} className="uline text-ink">
                   {p.label}
                 </a>
               </li>
             ))}
             <li>
-              <a href={`mailto:${CONTACT.email}`} className="link-line">
+              <a href={`mailto:${CONTACT.email}`} className="uline">
                 {CONTACT.email}
               </a>
             </li>
-            <li>
-              <T k="ci.addrv" />
-            </li>
           </ul>
         </div>
-        <div className="md:col-span-2">
-          <p className="label mb-5">{t('ft.soc')}</p>
-          <ul className="space-y-2 text-sm">
+        <div className="text-mute">
+          <p className="eyebrow mb-5">{plain(t('ci.addr'))}</p>
+          <T as="p" k="ci.addrv" className="text-ink" />
+          <T as="p" k="ci.hoursv" className="mt-4 text-sm" />
+        </div>
+        <div>
+          <p className="eyebrow mb-5">{t('ft.soc')}</p>
+          <ul className="space-y-2">
             {[
               ['Instagram', CONTACT.instagram],
               ['Telegram', CONTACT.telegram],
               ['Facebook', CONTACT.facebook],
             ].map(([name, href]) => (
               <li key={name}>
-                <a href={href} target="_blank" rel="noreferrer" className="link-line text-ash hover:text-bone">
-                  {name} ↗
+                <a href={href} target="_blank" rel="noreferrer" className="uline font-display text-lg italic">
+                  {name}
                 </a>
               </li>
             ))}
@@ -89,23 +76,11 @@ export function Footer() {
         </div>
       </div>
 
-      <div
-        ref={word}
-        className="display mt-20 flex select-none justify-between overflow-hidden bg-gradient-to-b from-[#e8c987] via-[#c39f5f] to-[#8c6a2f] bg-clip-text text-[21vw] leading-[0.8] tracking-[-0.04em] text-transparent"
-        aria-hidden
-      >
-        {'manetti'.split('').map((ch, i) => (
-          <span key={i} className="inline-block bg-gradient-to-b from-[#ecd08f] via-[#c39f5f] to-[#8c6a2f] bg-clip-text">
-            {ch}
-          </span>
-        ))}
-      </div>
-
-      <div className="flex flex-wrap items-center justify-between gap-4 border-t border-line py-6 text-xs text-mute">
+      <div className="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-line py-6 text-xs text-mute">
         <span>
-          © {YEAR} Giusto Manetti Battiloro Uzbekistan. {t('ft.rights')}. · {t('ft.made')}
+          © {YEAR} Giusto Manetti Battiloro Uzbekistan. {t('ft.rights')}.
         </span>
-        <button onClick={() => lenis?.scrollTo(0, { duration: 2 })} className="label link-line">
+        <button onClick={() => lenis?.scrollTo(0, { duration: 2.2 })} className="meta uline">
           {t('top')} ↑
         </button>
       </div>

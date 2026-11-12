@@ -1,15 +1,14 @@
-import { CardGrid, ContactCTA, Lede, PageHero } from '../components/Blocks'
+import { CardGrid, CTA, PageHero } from '../components/Blocks'
 import { KATALOG } from '../data'
 
 export default function Katalog() {
   return (
     <>
-      <PageHero image={KATALOG.hero} eyebrow="k.eye" title="k.h" />
-      <section className="tone-light panel px-5 py-24 md:px-10 md:py-32">
-        <Lede k="k.p" />
+      <PageHero image={KATALOG.hero} eyebrow="k.eye" title="k.h" lede="k.p" index="II" />
+      <section className="px-5 pb-28 md:px-10 md:pb-40">
         <CardGrid items={KATALOG.groups} />
       </section>
-      <ContactCTA text="k.note" />
+      <CTA text="k.note" />
     </>
   )
 }
