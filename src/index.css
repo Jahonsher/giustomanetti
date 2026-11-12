@@ -1,0 +1,286 @@
+@import "tailwindcss";
+
+@theme {
+  /* Giusto Manetti: Florentine gold on deep navy, ivory paper */
+  --color-ink: #0a0f1e;
+  --color-char: #151e38;
+  --color-bone: #f3ece0;
+  --color-ash: #a3a6b4;
+  --color-mute: #5d6378;
+  --color-sand: #c9a45f;
+  --color-line: rgb(243 236 224 / 0.14);
+
+  --font-display: "Cormorant Garamond", "Times New Roman", serif;
+  --font-sans: "Manrope Variable", "Helvetica Neue", Arial, sans-serif;
+
+  --ease-expo: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+@layer base {
+  html {
+    background: var(--color-ink);
+    color: var(--color-bone);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-sand);
+    color: var(--color-ink);
+  }
+
+  a,
+  button {
+    cursor: pointer;
+  }
+
+  img {
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* hide the native cursor only when the custom one is active */
+html.has-cursor,
+html.has-cursor a,
+html.has-cursor button {
+  cursor: none;
+}
+
+@layer components {
+  .label {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-ash);
+  }
+
+  .display {
+    font-family: var(--font-display);
+    font-weight: 300;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+  }
+
+  .link-line {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: 100% 100%;
+    transition: background-size 0.7s var(--ease-expo);
+  }
+  .link-line:hover,
+  .link-line:focus-visible {
+    background-size: 100% 1px;
+    background-position: 0% 100%;
+  }
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: -50%;
+    pointer-events: none;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    animation: grain 1.2s steps(6) infinite;
+  }
+}
+
+@layer components {
+/* ---------- section tones ----------
+ * Light / sand sections remap the colour tokens, so every component inside
+ * (text-bone, border-line, bg-bone buttons…) flips automatically. */
+.tone-light,
+.tone-sand,
+.ui-on-light {
+  --color-bone: #182340;
+  --color-ink: #f5efe4;
+  --color-char: #eae1d0;
+  --color-ash: #5a5f72;
+  --color-mute: #8b8e9b;
+  --color-sand: #9b7635;
+  --color-line: rgb(24 35 64 / 0.14);
+}
+.tone-light,
+.tone-sand {
+  color: var(--color-bone);
+}
+.tone-light {
+  background-color: #f5efe4;
+}
+/* gold panel */
+.tone-sand {
+  background: linear-gradient(135deg, #d8b673, #c39f5f 45%, #a88446);
+  --color-ash: #3a3221;
+  --color-sand: #182340;
+  --color-line: rgb(24 35 64 / 0.22);
+}
+.tone-char {
+  background-color: #151e38;
+}
+/* inset rounded "card" sections */
+.panel {
+  margin: 0.5rem;
+  border-radius: 28px;
+}
+@media (min-width: 768px) {
+  .panel {
+    margin: 0.75rem;
+    border-radius: 44px;
+  }
+}
+
+/* ---------- Liquid Glass (iOS 26 style) ----------
+ * Clear, water-like glass: almost no tint, a light blur, a bright rim and
+ * inner caustics. In Chromium, lib/liquid.ts adds real edge refraction
+ * (an SVG displacement map applied through backdrop-filter). */
+.glass {
+  position: relative;
+  isolation: isolate;
+  background-color: rgb(10 15 30 / 0.16);
+  -webkit-backdrop-filter: blur(8px) saturate(170%) brightness(1.04);
+  backdrop-filter: blur(8px) saturate(170%) brightness(1.04);
+  box-shadow:
+    inset 0 1px 0.5px rgb(255 255 255 / 0.65),
+    inset 0 -1px 1px rgb(255 255 255 / 0.18),
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.22),
+    inset 0 10px 18px -12px rgb(255 255 255 / 0.4),
+    inset 0 -12px 22px -16px rgb(255 255 255 / 0.3),
+    0 10px 34px -10px rgb(0 0 0 / 0.4),
+    0 1px 3px rgb(0 0 0 / 0.12);
+  transition:
+    background-color 0.7s var(--ease-expo),
+    box-shadow 0.7s var(--ease-expo);
+}
+/* bright rim: light catches the top-left and bottom-right edges */
+.glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgb(255 255 255 / 0.85), rgb(255 255 255 / 0.12) 28%, rgb(255 255 255 / 0) 50%, rgb(255 255 255 / 0.1) 72%, rgb(255 255 255 / 0.6));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  pointer-events: none;
+}
+/* specular glint that follows the pointer */
+.glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(160px circle at var(--mx, 50%) var(--my, -40%), rgb(255 255 255 / 0.2), transparent 70%);
+  opacity: var(--hl, 0);
+  transition: opacity 0.8s var(--ease-expo);
+  pointer-events: none;
+}
+.glass .label {
+  text-shadow: 0 1px 10px rgb(0 0 0 / 0.35);
+}
+
+/* light glass — the bar adapts when it floats over a light section */
+.glass.is-light {
+  background-color: rgb(255 255 255 / 0.22);
+  box-shadow:
+    inset 0 1px 0.5px rgb(255 255 255 / 1),
+    inset 0 -1px 1px rgb(255 255 255 / 0.5),
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.6),
+    inset 0 10px 18px -12px rgb(255 255 255 / 0.8),
+    inset 0 -12px 22px -16px rgb(255 255 255 / 0.6),
+    0 10px 34px -12px rgb(0 0 0 / 0.22),
+    0 1px 3px rgb(0 0 0 / 0.08);
+}
+.glass.is-light .label {
+  text-shadow: 0 1px 8px rgb(255 255 255 / 0.6);
+}
+.glass .logo {
+  transition: filter 0.7s var(--ease-expo);
+}
+.glass.is-light .logo {
+  filter: brightness(0);
+}
+
+/* the big dropdown panel: still see-through, a bit more blur for legibility */
+.glass.glass-panel {
+  background-color: rgb(10 15 30 / 0.34);
+  -webkit-backdrop-filter: blur(18px) saturate(170%) brightness(0.96);
+  backdrop-filter: blur(18px) saturate(170%) brightness(0.96);
+}
+.glass-panel .display {
+  text-shadow: 0 2px 18px rgb(0 0 0 / 0.35);
+}
+
+/* a water droplet: clear centre, bright meniscus, caustic at the bottom */
+.glass-drop,
+.glass-chip {
+  position: relative;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgb(255 255 255 / 0.3), rgb(255 255 255 / 0.04) 62%),
+    radial-gradient(90% 60% at 50% 110%, rgb(255 255 255 / 0.22), transparent 70%);
+  box-shadow:
+    inset 0 1px 1px rgb(255 255 255 / 0.85),
+    inset 0 -1.5px 3px rgb(255 255 255 / 0.25),
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.4),
+    inset 0 -6px 10px -6px rgb(0 0 0 / 0.18),
+    0 6px 16px -6px rgb(0 0 0 / 0.38);
+}
+.glass.is-light .glass-drop,
+.glass.is-light .glass-chip {
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgb(255 255 255 / 0.95), rgb(255 255 255 / 0.45) 62%),
+    radial-gradient(90% 60% at 50% 110%, rgb(255 255 255 / 0.8), transparent 70%);
+  box-shadow:
+    inset 0 1px 1px rgb(255 255 255 / 1),
+    inset 0 0 0 0.5px rgb(255 255 255 / 0.9),
+    inset 0 -6px 10px -6px rgb(0 0 0 / 0.08),
+    0 6px 16px -6px rgb(0 0 0 / 0.2);
+}
+}
+
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-6%, 4%); }
+  40% { transform: translate(5%, -7%); }
+  60% { transform: translate(-3%, 8%); }
+  80% { transform: translate(7%, 2%); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes scrollcue {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain::after { animation: none; }
+}
