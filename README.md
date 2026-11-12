@@ -6,7 +6,7 @@ Giusto Manetti Battiloro kompaniyasining Oʻzbekistondagi rasmiy vakili sayti.
 Manetti ranglarida — Florensiya oltini (`#C39F5F`) va toʻq koʻk (`#182340`), fil suyagi panellar.
 6 sahifa, 3 til (ru / uz / en).
 
-🔗 Koʻrish (GitHub Pages): https://jahonsher.github.io/giustomanetti-uz/
+🔗 Koʻrish (GitHub Pages): https://jahonsher.github.io/giustomanetti/
 
 ## Nimalar bor
 
@@ -24,7 +24,7 @@ Manetti ranglarida — Florensiya oltini (`#C39F5F`) va toʻq koʻk (`#182340`),
 npm install      # birinchi marta
 npm run dev      # http://localhost:4180
 npm run build    # giustomanetti.uz hostingi uchun -> dist/
-npm run deploy   # GitHub Pages preview (/giustomanetti-uz/ ostida)
+npm run deploy   # GitHub Pages preview (/giustomanetti/ ostida)
 ```
 
 ## Papkalar

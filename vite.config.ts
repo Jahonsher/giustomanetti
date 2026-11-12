@@ -5,7 +5,7 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   // giustomanetti.uz hostingi uchun sayt ildizda ('/').
-  // GitHub Pages preview esa `npm run deploy` bilan /giustomanetti-uz/ ostida yig'iladi.
+  // GitHub Pages preview esa `npm run deploy` bilan /giustomanetti/ ostida yig'iladi.
   base: '/',
   server: { port: 4180 },
   plugins: [react(), tailwindcss()],

@@ -5,7 +5,7 @@
 export type Lang = 'ru' | 'uz' | 'en'
 export const LANGS: Lang[] = ['ru', 'uz', 'en']
 
-/** Resolve a public file against the deploy base (e.g. /giustomanetti-uz/). */
+/** Resolve a public file against the deploy base (e.g. /giustomanetti/). */
 export const asset = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`
 /** public/assets/<p>.webp */
 export const img = (p: string) => `assets/${p}.webp`
