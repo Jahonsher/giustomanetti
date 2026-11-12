@@ -1,0 +1,13 @@
+# React Router uchun: mavjud boʻlmagan har qanday manzil index.html ga boradi.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Eski .html manzillar yangi manzillarga doimiy yoʻnaltiriladi (SEO saqlanadi)
+  RewriteRule ^index\.html$ / [R=301,L]
+  RewriteRule ^(qurilish|katalog|kosmetika|galereya|aloqa)\.html$ /$1 [R=301,L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
