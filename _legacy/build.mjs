@@ -1,0 +1,48 @@
+/* Sahifalarni yig'ish: src/ + umumiy qismlar  ->  ildizdagi .html fayllar.
+   Ishga tushirish:  node build.mjs
+   Matnni o'zgartirish uchun bu fayl EMAS, assets/m-copy.js tahrirlanadi. */
+
+import { readFile, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import { join, dirname } from 'node:path';
+
+const ROOT = dirname(fileURLToPath(import.meta.url));
+const src = (f) => readFile(join(ROOT, 'src', f), 'utf8');
+
+const PAGES = [
+  { file: 'index.html',    tkey: 't.index',
+    title: "Giusto Manetti Battiloro · сусальное и съедобное золото в Узбекистане",
+    desc:  "Официальный представитель Giusto Manetti Battiloro (Firenze, с 1600 года) в Узбекистане. Сусальное золото, материалы для золочения, съедобное золото и серебро. Ташкент." },
+  { file: 'qurilish.html', tkey: 't.qur',
+    title: "Золочение в строительстве и декоре · Giusto Manetti Battiloro",
+    desc:  "Сусальное золото для куполов, минаретов, фасадов, интерьеров и лепнины. Наружное золочение, реставрация, поставки объектам и мастерским по Узбекистану." },
+  { file: 'katalog.html',  tkey: 't.kat',
+    title: "Каталог для золочения · Giusto Manetti Battiloro",
+    desc:  "Сусальное золото 24K, серебро, палладий, платина, болюс, миссии, защитные составы и инструменты для золочения. Поставки по Узбекистану." },
+  { file: 'kosmetika.html', tkey: 't.kos',
+    title: "Косметическое золото 24K · Giusto Manetti Battiloro",
+    desc:  "Сусальное золото 24K для косметологии: маски для лица, патчи под глаза, салонные процедуры и производство косметики. Поставки по Узбекистану." },
+  { file: 'galereya.html', tkey: 't.gal',
+    title: "Галерея · Giusto Manetti Battiloro",
+    desc:  "Своды и фасады, рамы и иконы, десерты и коктейли. Работы, выполненные золотом Manetti." },
+  { file: 'aloqa.html',    tkey: 't.con',
+    title: "Контакты · Giusto Manetti Battiloro Узбекистан",
+    desc:  "Ташкент, Юнусабад, ул. Абдуллы Кадыри, 38А. Телефон +998 95 145 44 22. Заявка на прайс Giusto Manetti Battiloro." }
+];
+
+const head   = await src('_head.html');
+const header = await src('_header.html');
+const footer = await src('_footer.html');
+
+for (const p of PAGES) {
+  const body = await src(p.file);
+  const html = head
+      .replaceAll('{{TITLE}}', p.title)
+      .replaceAll('{{DESC}}',  p.desc)
+      .replaceAll('{{TKEY}}',  p.tkey)
+      .replaceAll('{{FILE}}',  p.file === 'index.html' ? '' : p.file)
+    + '\n' + header + '\n' + body + '\n' + footer;
+  await writeFile(join(ROOT, p.file), html, 'utf8');
+  console.log('  ' + p.file + '  ' + html.length + ' bayt');
+}
+console.log(PAGES.length + ' ta sahifa yig‘ildi.');
