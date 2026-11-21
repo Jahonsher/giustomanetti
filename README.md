@@ -45,6 +45,9 @@ src/
   lib/motion.ts            silliq skroll (Lenis) + GSAP
 public/                    oʻzgarmasdan dist/ ga koʻchadi
   assets/img, reels, poster  rasmlar (webp + jpg)
+  assets/katalog            Manetti kataloglari: pdf/ (yuklab olish) va har sahifa rasmi
+                           (pNNN.webp ~1000-1600px, tNNN.webp kichik) — Katalog sahifasidagi koʻrgich
+  assets/img/katalog        katalogdan kesib olingan mahsulot rasmlari
   send.php                 ariza -> Telegram
   .htaccess                React Router uchun + eski .html manzillardan 301
 _legacy/                   eski HTML versiya

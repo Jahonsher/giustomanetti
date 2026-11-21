@@ -47,7 +47,8 @@ export function Arch({ src, alt = '', shape = 'arch', className = '', parallax =
 
   return (
     <figure ref={root} className={`group relative isolate overflow-hidden ${frame} ${className}`} data-cursor={cursor}>
-      <div data-par className="absolute inset-x-0 -inset-y-[8%]">
+      {/* without parallax the photo is shown whole (catalogue covers) */}
+      <div data-par className={`absolute inset-x-0 ${parallax ? '-inset-y-[8%]' : 'inset-y-0'}`}>
         <div className="h-full w-full transition-transform duration-[1.4s] ease-[var(--ease-expo)] group-hover:scale-[1.05]">
           <img
             data-img

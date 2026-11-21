@@ -1,6 +1,7 @@
 import { CardGrid, CTA, Gallery, PageHero, Split } from '../components/Blocks'
 import { Blur, Lines } from '../components/Reveal'
-import { QURILISH } from '../data'
+import { ProductGrid } from '../components/Catalog'
+import { QURILISH, QURILISH_MATERIALS } from '../data'
 import { plain, useLang } from '../i18n'
 
 export default function Qurilish() {
@@ -23,6 +24,16 @@ export default function Qurilish() {
       </section>
       <section className="px-5 py-28 md:px-10 md:py-40">
         <Split image={QURILISH.split} eyebrow="q.why" title="q.whyh" paragraphs={['q.whyp1', 'q.whyp2']} />
+      </section>
+      <section className="tone-cream px-5 py-28 md:px-10 md:py-36">
+        <div className="mb-16 grid gap-8 md:mb-24 md:grid-cols-12">
+          <div className="md:col-span-7">
+            <Blur as="p" className="eyebrow mb-6">{plain(t('q.mat.eye'))}</Blur>
+            <Blur as="h2" by="chars" className="didone text-6xl md:text-[5.4vw]" html={t('q.mat.h')} />
+          </div>
+          <Lines className="self-end leading-relaxed text-mute md:col-span-4 md:col-start-9" html={t('q.mat.p')} />
+        </div>
+        <ProductGrid items={QURILISH_MATERIALS} cols={3} />
       </section>
       <CTA text="q.ask" />
     </>

@@ -122,17 +122,130 @@ export const QURILISH = {
   split: img('img/wp/ig-338945148'),
 }
 
+/* ---------- Manetti catalogues (PDF + page images in public/assets/katalog) ---------- */
+export type Catalog = {
+  id: string
+  /** proper name, the same in every language */
+  title: string
+  /** text key: one-line description */
+  sub: string
+  year: number
+  /** printed pages, as in the PDF */
+  printed: number
+  /** number of page images p001…pNNN (the 2024 catalogue is laid out in spreads) */
+  count: number
+  dir: string
+  pdf: string
+  pdfMb: number
+  /** image size of page i (px) — spreads are twice as wide */
+  size: (i: number) => [number, number]
+  /** chapters: text key + page image number */
+  toc: { k: string; page: number }[]
+}
+
+const pad3 = (n: number) => String(n).padStart(3, '0')
+export const pageSrc = (c: Catalog, i: number) => `assets/katalog/${c.dir}/p${pad3(i)}.webp`
+export const thumbSrc = (c: Catalog, i: number) => `assets/katalog/${c.dir}/t${pad3(i)}.webp`
+export const isSpread = (c: Catalog, i: number) => c.size(i)[0] > c.size(i)[1]
+/** Link into the catalogue viewer on the Katalog page (opens on load). */
+export const catalogHref = (id: string, page: number) => `/katalog?catalog=${id}&page=${page}`
+
+export const CATALOGS: Catalog[] = [
+  {
+    id: 'gmb-2024',
+    title: 'Catalogo 2024',
+    sub: 'cat.gmb.s',
+    year: 2024,
+    printed: 158,
+    count: 80,
+    dir: 'gmb-2024',
+    pdf: 'assets/katalog/pdf/giusto-manetti-catalogo-2024.pdf',
+    pdfMb: 7.6,
+    // page 1 is the front cover, page 80 the back cover; everything between is a spread
+    size: (i) => (i === 1 || i === 80 ? [800, 1131] : [1600, 1131]),
+    toc: [
+      { k: 'ch.prec', page: 8 },
+      { k: 'ch.imit', page: 27 },
+      { k: 'ch.guazzo', page: 37 },
+      { k: 'ch.missione', page: 41 },
+      { k: 'ch.fin', page: 47 },
+      { k: 'ch.prot', page: 51 },
+      { k: 'ch.tools', page: 59 },
+      { k: 'ch.kolner', page: 74 },
+      { k: 'ch.academy', page: 76 },
+    ],
+  },
+  {
+    id: 'belle-arti-2025',
+    title: 'Belle Arti 2025',
+    sub: 'cat.ba.s',
+    year: 2025,
+    printed: 65,
+    count: 65,
+    dir: 'belle-arti-2025',
+    pdf: 'assets/katalog/pdf/giusto-manetti-belle-arti-2025.pdf',
+    pdfMb: 5.3,
+    size: () => [1000, 1414],
+    toc: [
+      { k: 'ch.prec', page: 9 },
+      { k: 'ch.imit', page: 15 },
+      { k: 'ch.guazzo', page: 23 },
+      { k: 'ch.missione', page: 29 },
+      { k: 'ch.fin', page: 35 },
+      { k: 'ch.prot', page: 41 },
+      { k: 'ch.brushes', page: 47 },
+      { k: 'ch.burnish', page: 53 },
+      { k: 'ch.academy', page: 63 },
+    ],
+  },
+]
+
+/** Product shown with a photo from the catalogue; opens the catalogue on its page. */
+export type Product = { id: string; image: string; it: string; title: string; text: string; catalog: string; page: number }
+const product = (id: string, it: string, page: number, catalog = 'gmb-2024', textId = id): Product => ({
+  id,
+  image: img(`img/katalog/${id}`),
+  it,
+  title: `p.${textId}.h`,
+  text: `p.${textId}.p`,
+  catalog,
+  page,
+})
+
 export const KATALOG = {
   hero: img('poster/katalog-poster'),
+  // the six sections of the Manetti catalogues; photos from the Belle Arti 2025 catalogue
   groups: [
-    { image: img('img/wp/img-2204'), alt: 'Листы сусального золота', title: 'k.g1.h', text: 'k.g1.p', tags: ['24K', 'Argento', 'Palladio', 'Platino'] },
-    { image: img('img/wp/1'), alt: 'Подготовка поверхности', title: 'k.g2.h', text: 'k.g2.p', tags: ['Prep & Seal', 'Gommalacca'] },
-    { image: img('img/wp/painting-19'), alt: 'Болюс и гипс', title: 'k.g3.h', text: 'k.g3.p', tags: ['Bolo', 'Gesso'] },
-    { image: img('img/wp/doratura-guazzo-09b'), alt: 'Миссии и клеи', title: 'k.g4.h', text: 'k.g4.p', tags: ['Missione', 'Colla'] },
-    { image: img('img/wp/ig-338945148'), alt: 'Защита и патина', title: 'k.g5.h', text: 'k.g5.p', tags: ['Patina', 'Vernice'] },
-    { image: img('img/wp/ig-339085209'), alt: 'Инструменты для золочения', title: 'k.g6.h', text: 'k.g6.p', tags: ['Lampemsel', 'Agata'] },
+    { image: img('img/katalog/g-doratura'), alt: 'Foglia oro e argento Giusto Manetti', title: 'k.g1.h', text: 'k.g1.p', tags: ['Oro', 'Argento', 'Palladio', 'Platino', 'Similoro'] },
+    { image: img('img/katalog/g-guazzo'), alt: 'Doratura a guazzo: gesso, colla, bolo', title: 'k.g2.h', text: 'k.g2.p', tags: ['Gesso di Bologna', 'Colla di coniglio', 'Bolo'] },
+    { image: img('img/katalog/g-missione'), alt: 'Doratura a missione', title: 'k.g3.h', text: 'k.g3.p', tags: ['Missione all’acqua', 'ad alcool', 'a vernice'] },
+    { image: img('img/katalog/g-finitura'), alt: 'Finitura: vernice mecca, bitume', title: 'k.g4.h', text: 'k.g4.p', tags: ['Vernice mecca', 'Bitume', 'Cera bituminosa'] },
+    { image: img('img/katalog/g-protezione'), alt: 'Protezione: gommalacca e acrilici', title: 'k.g5.h', text: 'k.g5.p', tags: ['Gommalacca', 'Protezione acrilica', 'Lascaux UV'] },
+    { image: img('img/katalog/g-strumenti'), alt: 'Strumenti: coltelli, brunitoi, cuscinetto', title: 'k.g6.h', text: 'k.g6.p', tags: ['Cuscinetto', 'Coltello', 'Pennellessa', 'Brunitoio'] },
   ] as Card[],
+  // photos cropped from the 2024 catalogue spreads; page = page image of that product
+  products: [
+    product('foglia-libretto', 'Foglia in libretto', 13),
+    product('libretto-singolo', 'Foglia in libretto singolo', 17),
+    product('foglia-rotolo', 'Foglia in rotolo', 21),
+    product('foglia-glass', 'Foglia glass', 20),
+    product('foglia-imitazione', 'Foglia imitazione', 28),
+    product('kit-cornice', 'Kit · Dorare una cornice', 73),
+    product('bolo-italiano', 'Bolo italiano', 39),
+    product('missione', 'Missione', 43),
+    product('gommalacca', 'Gommalacca', 52),
+    product('bitume', 'Bitume · Cera bituminosa', 49),
+    product('brunitoi', 'Brunitoi in pietra d’agata', 69),
+    product('cuscinetto-coltello', 'Cuscinetto · Coltello · Pennellessa', 60),
+  ] as Product[],
 }
+
+/** Qurilish page: catalogue materials for buildings and exteriors. */
+export const QURILISH_MATERIALS: Product[] = [
+  product('foglia-decalco', 'Foglia a decalco · Extra', 10),
+  product('foglia-rotolo', 'Foglia in rotolo', 21),
+  product('protezione-esterni', 'Protezione acrilica per esterni', 56),
+]
 
 export const KOSMETIKA = {
   hero: img('img/kosmetika'),
